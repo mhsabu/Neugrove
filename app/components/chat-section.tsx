@@ -4,6 +4,8 @@ import { useChat } from "ai/react";
 import { useMemo } from "react";
 import { insertDataIntoMessages } from "./transform";
 import { ChatInput, ChatMessages } from "./ui/chat";
+import  fireDb  from "../firebase";
+
 
 export default function ChatSection() {
   const {
@@ -25,6 +27,26 @@ export default function ChatSection() {
   const transformedMessages = useMemo(() => {
     return insertDataIntoMessages(messages, data);
   }, [messages, data]);
+const beforeHandleSubmit=(e) =>{ 
+  fireDb.child('messages').push(
+    {
+      question: input,
+    },
+    error => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Data saved successfully!');
+      }
+    }
+  );
+  
+  console.log("input found",input)
+  handleSubmit(e)
+  
+
+
+}
 
   return (
     <div className="space-y-4 max-w-5xl w-full">
@@ -36,7 +58,7 @@ export default function ChatSection() {
       />
       <ChatInput
         input={input}
-        handleSubmit={handleSubmit}
+        handleSubmit={beforeHandleSubmit}
         handleInputChange={handleInputChange}
         isLoading={isLoading}
         multiModal={process.env.NEXT_PUBLIC_MODEL === "gpt-4-vision-preview"}
