@@ -4,8 +4,8 @@ import { useChat } from "ai/react";
 import { useMemo } from "react";
 import { insertDataIntoMessages } from "./transform";
 import { ChatInput, ChatMessages } from "./ui/chat";
-import  fireDb  from "../firebase";
-
+import { ref, push } from 'firebase/database';
+import database from '../firebase'; 
 
 export default function ChatSection() {
   const {
@@ -27,26 +27,27 @@ export default function ChatSection() {
   const transformedMessages = useMemo(() => {
     return insertDataIntoMessages(messages, data);
   }, [messages, data]);
-const beforeHandleSubmit=(e) =>{ 
-  fireDb.child('messages').push(
-    {
+  const beforeHandleSubmit = (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+  
+    // Create a reference to the 'messages' node
+    const messagesRef = ref(database, 'messages');
+  
+    // Push a new child to 'messages' with the input data
+    push(messagesRef, {
       question: input,
-    },
-    error => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Data saved successfully!');
-      }
-    }
-  );
+    }).then(() => {
+      console.log('Data saved successfully!');
+      // Reset input or perform other actions upon successful data submission
+    }).catch((error) => {
+      console.error(error);
+    });
   
-  console.log("input found",input)
-  handleSubmit(e)
+    console.log("Input found", input);
   
-
-
-}
+    // Assuming handleSubmit is your custom logic to handle form submission after pushing data to Firebase
+    handleSubmit(e); 
+  };
 
   return (
     <div className="space-y-4 max-w-5xl w-full">
