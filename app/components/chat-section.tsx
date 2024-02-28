@@ -27,7 +27,7 @@ export default function ChatSection() {
   const transformedMessages = useMemo(() => {
     return insertDataIntoMessages(messages, data);
   }, [messages, data]);
-  const beforeHandleSubmit = (e) => {
+  const beforeHandleSubmit = (e:any) => {
     e.preventDefault(); // Prevent the default form submission behavior
   
     // Create a reference to the 'messages' node

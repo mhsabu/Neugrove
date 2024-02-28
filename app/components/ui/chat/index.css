@@ -1,0 +1,16 @@
+.wrapper{
+    position:relative;
+
+}
+.dot{ 
+    position:absolute;
+    bottom:10px;
+    left:10px;
+
+}
+.biggerDot{
+    font-size: 40px;
+}
+.textColor{
+    color:green;
+}
