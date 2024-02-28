@@ -3,12 +3,24 @@ import { Dot } from 'react-animated-dots';
 import ChatItem from "./chat-item";
 import "./index.css";
 
+export interface Message {
+  id: string;
+  content: string;
+  role: string;
+}
+
 export default function ChatMessages({
   messages,
   isLoading,
   reload,
   stop,
-}) {
+}:{
+  messages: Message[];
+  isLoading?: boolean;
+  stop?: () => void;
+  reload?: () => void;
+}
+) {
   const [currentLoadingMessage, setCurrentLoadingMessage] = useState('');
   const scrollableChatContainerRef = useRef<HTMLDivElement>(null);
 
